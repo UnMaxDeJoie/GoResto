@@ -1,10 +1,8 @@
-FROM golang:1.21
+FROM golang:latest
 
 WORKDIR /app
+COPY . /app
 
-COPY go.mod .
-COPY main.go .
+RUN go build -o main
 
-RUN go build -o bin .
-
-ENTRYPOINT [ "/app/bin" ]
+CMD [ "./main" ]
