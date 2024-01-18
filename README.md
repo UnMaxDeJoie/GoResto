@@ -1,2 +1,4 @@
 # Go Resto
-Système de commande pour de mutltiple food truck situé dans un même espace
+Système de centralisation des commandes pour de multiples foods truc situé dans un même espace
+
+Développer avec un backend en Go 
