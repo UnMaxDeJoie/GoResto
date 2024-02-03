@@ -1,10 +1,9 @@
-package controller
+package Managers
 
 import (
 	"database/sql"
+	Mydb "github.com/go-sql-driver/mysql"
 	"log"
-
-	"github.com/go-sql-driver/mysql"
 )
 
 type DBController struct {
@@ -12,7 +11,7 @@ type DBController struct {
 }
 
 func NewDBController() *DBController {
-	conf := mysql.Config{
+	conf := Mydb.Config{
 		User:                 "root",
 		Passwd:               "password",
 		Net:                  "tcp",
@@ -31,4 +30,5 @@ func NewDBController() *DBController {
 	}
 
 	return &DBController{DB: db}
+
 }

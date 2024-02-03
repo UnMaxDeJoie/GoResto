@@ -1,12 +1,11 @@
-package managers
+package Managers
 
 import (
+	_ "github.com/go-sql-driver/mysql" // Driver MySQL
 	"log"
-
-	_ "github.com/go-sql-driver/mysql"
 )
 
-func GetUserById(int uid) {
+func GetUserById(db *DBController, uid int) {
 	query := "SELECT id, username, email, permissions FROM users Where id= ?"
 
 	var (
@@ -15,8 +14,9 @@ func GetUserById(int uid) {
 		email       string
 		permissions uint8
 	)
-	err = db.QueryRow(query, uid).scan(&id, &username, &email, &permissions)
+	err := db.DB.QueryRow(query, uid).Scan(&id, &username, &email, &permissions)
 	if err != nil {
 		log.Fatal(err)
 	}
+
 }
