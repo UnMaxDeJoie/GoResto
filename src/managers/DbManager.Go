@@ -10,7 +10,9 @@ type DBController struct {
 	DB *sql.DB
 }
 
-func NewDBController() *DBController {
+var G_Mydb DBController
+
+func NewDBController() {
 	conf := Mydb.Config{
 		User:                 "root",
 		Passwd:               "password",
@@ -29,6 +31,11 @@ func NewDBController() *DBController {
 		log.Fatal(err)
 	}
 
-	return &DBController{DB: db}
-
+	G_Mydb = DBController{DB: db}
 }
+
+func GetDBController() DBController {
+	return G_Mydb
+}
+
+/*regarde comment relancer la connexion si ca échoue la fonction ping existe elle renvoie un nil*/
