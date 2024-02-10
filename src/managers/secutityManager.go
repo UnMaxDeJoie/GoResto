@@ -1,10 +1,10 @@
 package Managers
 
 import (
+	"GoResto/entities"
 	"database/sql"
 	"errors"
 	"fmt"
-	"github.com/UnMaxDeJoie/GoResto/entities"
 )
 
 var secretKey = []byte("secret-key")

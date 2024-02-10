@@ -1,7 +1,7 @@
 package main
 
 import (
-	Managers "GoResto/Managers"
+	"GoResto/Managers"
 	"fmt"
 	"log"
 )

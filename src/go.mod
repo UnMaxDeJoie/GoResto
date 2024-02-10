@@ -1,4 +1,4 @@
-module github.com/UnMaxDeJoie/GoResto
+module GoResto
 
 go 1.21.6
 
