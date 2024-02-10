@@ -1,7 +1,7 @@
 package main
 
 import (
-	"GoResto/Managers"
+	"GoResto/managers"
 	"fmt"
 	"log"
 )
@@ -13,10 +13,10 @@ type Menu struct {
 
 func main() {
 	// Étape 1: Initialiser la connexion
-	Managers.NewDBController()
+	managers.NewDBController()
 
 	// Étape 2: Récupérer l'instance de connexion
-	truc := Managers.GetDBController()
+	truc := managers.GetDBController()
 	if truc == nil {
 		log.Fatal("Impossible d'établir une connexion à la base de données.")
 	}

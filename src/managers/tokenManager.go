@@ -1,4 +1,4 @@
-package Managers
+package managers
 
 import (
 	"github.com/golang-jwt/jwt"

@@ -13,7 +13,7 @@ func router() {
 
 	// Login
 	r.Route("/", func(r chi.Router) {
-		r.Post("/login", Managers.Login)
+		r.Post("/login", managers.Login)
 		r.Post("/createCompte", CreateCompte)
 	})
 
