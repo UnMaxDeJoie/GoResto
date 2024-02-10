@@ -1,11 +1,9 @@
 package main
 
 import (
-	"html/template"
+	"fmt"
+	"github.com/UnMaxDeJoie/GoResto/Managers"
 	"log"
-	"net/http"
-
-	Managers "github.com/UnMaxDeJoie/GoResto/managers"
 )
 
 type Menu struct {
@@ -14,50 +12,21 @@ type Menu struct {
 }
 
 func main() {
-	// Définition de la fonction handler pour la page principale
-	goRestoHandler := func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != http.MethodPost {
-			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-			return
-		}
+	// Étape 1: Initialiser la connexion
+	Managers.NewDBController()
 
-		// Exemple d'utilisation de la fonction SendNotification
-		serviceAccountKeyPath := "path/to/serviceAccountKey.json"
-		deviceToken := "token_de_l_appareil"
-		title := "Titre de la notification"
-		body := "Corps de la notification"
-
-		// Envoi de la notification avec les informations récupérées
-		err := Managers.SendNotification(serviceAccountKeyPath, deviceToken, title, body)
-		if err != nil {
-			http.Error(w, "Erreur lors de l'envoi de la notification", http.StatusInternalServerError)
-			log.Printf("Erreur lors de l'envoi de la notification: %v\n", err)
-			return
-		}
-
-		http.Redirect(w, r, "/", http.StatusSeeOther)
+	// Étape 2: Récupérer l'instance de connexion
+	truc := Managers.GetDBController()
+	if truc == nil || truc.DB == nil {
+		log.Fatal("Impossible d'établir une connexion à la base de données.")
 	}
 
-	// Définition du handler pour la page principale
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == http.MethodGet {
-			tmpl := template.Must(template.ParseFiles("template/index.html"))
-			menus := map[string][]Menu{
-				"Menus": {
-					{Food: "Burger", Drink: "Water"},
-					{Food: "Potatoes", Drink: "Koka"},
-					{Food: "Mochi", Drink: "Peace Ti"},
-				},
-			}
-			tmpl.Execute(w, menus)
-		} else {
-			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-		}
-	})
+	// Étape 3: Exécuter une requête de test
+	var testQuery string
+	err := truc.DB.QueryRow("SELECT 'Connexion réussie'").Scan(&testQuery)
+	if err != nil {
+		log.Fatalf("Échec de la requête de test : %v", err)
+	}
 
-	// Définition du handler pour le bouton de notification
-	http.HandleFunc("/send-notification", goRestoHandler)
-
-	// Lancement du serveur HTTP
-	log.Fatal(http.ListenAndServe(":3000", nil))
+	fmt.Println(testQuery)
 }

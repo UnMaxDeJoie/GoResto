@@ -1,5 +1,6 @@
 package Managers
 
+/*
 import (
 	"context"
 	firebase "firebase.google.com/go"
@@ -40,4 +41,4 @@ func SendNotification(serviceAccountKeyPath, deviceToken, title, body string) er
 	}
 
 	return nil
-}
+}*/

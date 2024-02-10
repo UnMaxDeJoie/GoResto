@@ -1,7 +1,6 @@
 package Managers
 
 import (
-	"database/sql"
 	"fmt"
 	"github.com/UnMaxDeJoie/GoResto/entities"
 	"log"
@@ -14,7 +13,6 @@ func GetUserById(Mydb *DBController, uid int) (entities.User, error) {
 
 	err := Mydb.DB.QueryRow(query, uid).Scan(&user.ID, &user.Username, &user.Email, &user.Permission)
 	if err != nil {
-
 		return entities.User{}, err
 	}
 
@@ -40,7 +38,7 @@ func DeleteUser(Mydb *DBController, uid int) {
 	}
 }
 
-func CreateUser(Mydb *sql.DB, Name string, Password string, email string, permission uint8) (entities.User, error) {
+func CreateUser(Mydb *DBController, Name string, Password string, email string, permission uint8) (entities.User, error) {
 
 	user := entities.User{
 		Username:   Name,
@@ -49,7 +47,7 @@ func CreateUser(Mydb *sql.DB, Name string, Password string, email string, permis
 		Permission: permission,
 	}
 
-	_, err := Mydb.Exec("INSERT INTO users (username, pw_hash, email, permissions) VALUES (?, ?, ?, ?)", user.Username, user.PwHash, user.Email, user.Permission)
+	_, err := Mydb.DB.Exec("INSERT INTO users (username, pw_hash, email, permissions) VALUES (?, ?, ?, ?)", user.Username, user.PwHash, user.Email, user.Permission)
 	if err != nil {
 		log.Printf("Erreur lors de la création de l'utilisateur : %v", err)
 		return entities.User{}, fmt.Errorf("could not create user: %v", err)

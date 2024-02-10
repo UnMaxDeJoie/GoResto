@@ -10,7 +10,7 @@ type DBController struct {
 	DB *sql.DB
 }
 
-var G_Mydb DBController
+var G_Mydb *DBController
 
 func NewDBController() {
 	conf := Mydb.Config{
@@ -31,10 +31,19 @@ func NewDBController() {
 		log.Fatal(err)
 	}
 
-	G_Mydb = DBController{DB: db}
+	G_Mydb = &DBController{DB: db}
 }
 
-func GetDBController() DBController {
+func GetDBController() *DBController {
+	if G_Mydb == nil || G_Mydb.DB == nil {
+		NewDBController() // Initialise la connexion si elle n'existe pas.
+	} else {
+		if err := G_Mydb.DB.Ping(); err != nil {
+			log.Println("La connexion à la base de données a été perdue. Tentative de reconnexion.")
+			NewDBController() // Réinitialise la connexion en cas d'échec du ping.
+		}
+	}
+
 	return G_Mydb
 }
 
