@@ -1,15 +1,16 @@
 package Managers
 
 import (
+	"GoResto/entities"
+	"database/sql"
 	"fmt"
-	"github.com/UnMaxDeJoie/GoResto/entities"
 	"time"
 )
 
-func createOrder(Mydb *DBController, userID, truckID int, time time.Time) (int, error) {
+func createOrder(Mydb *sql.DB, userID, truckID int, time time.Time) (int, error) {
 	query := `INSERT INTO orders (user_id, truck_id, time) VALUES (?, ?, ?)`
 
-	result, err := Mydb.DB.Exec(query, userID, truckID, time)
+	result, err := Mydb.Exec(query, userID, truckID, time)
 	if err != nil {
 		return 0, fmt.Errorf("createOrder: error when inserting new order: %v", err)
 	}
@@ -22,11 +23,11 @@ func createOrder(Mydb *DBController, userID, truckID int, time time.Time) (int, 
 	return int(orderID), nil
 }
 
-func getOrderByID(Mydb *DBController, orderID int) (entities.Order, error) {
+func getOrderByID(Mydb *sql.DB, orderID int) (entities.Order, error) {
 	var order entities.Order
 	query := `SELECT order_id, user_id, truck_id, time FROM orders WHERE order_id = ?`
 
-	err := Mydb.DB.QueryRow(query, orderID).Scan(&order.OrderID, &order.UserID, &order.TruckID, &order.Time)
+	err := Mydb.QueryRow(query, orderID).Scan(&order.OrderID, &order.UserID, &order.TruckID, &order.Time)
 	if err != nil {
 		return order, fmt.Errorf("getOrderByID: error when getting order with ID %d: %v", orderID, err)
 	}
@@ -34,10 +35,10 @@ func getOrderByID(Mydb *DBController, orderID int) (entities.Order, error) {
 	return order, nil
 }
 
-func updateOrder(Mydb *DBController, orderID, userID, truckID int, time time.Time) error {
+func updateOrder(Mydb *sql.DB, orderID, userID, truckID int, time time.Time) error {
 	query := `UPDATE orders SET user_id = ?, truck_id = ?, time = ? WHERE order_id = ?`
 
-	result, err := Mydb.DB.Exec(query, userID, truckID, time, orderID)
+	result, err := Mydb.Exec(query, userID, truckID, time, orderID)
 	if err != nil {
 		return fmt.Errorf("updateOrder: error when updating order with ID %d: %v", orderID, err)
 	}
@@ -54,10 +55,10 @@ func updateOrder(Mydb *DBController, orderID, userID, truckID int, time time.Tim
 	return nil
 }
 
-func deleteOrder(Mydb *DBController, orderID int) error {
+func deleteOrder(Mydb *sql.DB, orderID int) error {
 	query := `DELETE FROM orders WHERE order_id = ?`
 
-	result, err := Mydb.DB.Exec(query, orderID)
+	result, err := Mydb.Exec(query, orderID)
 	if err != nil {
 		return fmt.Errorf("deleteOrder: error when deleting order with ID %d: %v", orderID, err)
 	}

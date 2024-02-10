@@ -1,17 +1,18 @@
 package Managers
 
 import (
+	"GoResto/entities"
+	"database/sql"
 	"fmt"
-	"github.com/UnMaxDeJoie/GoResto/entities"
 	"log"
 )
 
-func GetChartById(Mydb *DBController, Chartid int) (entities.Chart, error) {
+func GetChartById(Mydb *sql.DB, Chartid int) (entities.Chart, error) {
 	query := "SELECT truck_id, label, description , price FROM chart WHERE consumable_id= ?"
 
 	var Chart entities.Chart
 
-	err := Mydb.DB.QueryRow(query, Chartid).Scan(&Chart.TruckID, &Chart.Label, &Chart.Description, &Chart.Price)
+	err := Mydb.QueryRow(query, Chartid).Scan(&Chart.TruckID, &Chart.Label, &Chart.Description, &Chart.Price)
 	if err != nil {
 
 		return entities.Chart{}, err
@@ -20,10 +21,10 @@ func GetChartById(Mydb *DBController, Chartid int) (entities.Chart, error) {
 	return Chart, nil
 }
 
-func GetTrucksChart(Mydb *DBController, Trucksid int) ([]entities.Chart, error) {
+func GetTrucksChart(Mydb *sql.DB, Trucksid int) ([]entities.Chart, error) {
 	query := "SELECT consumable_id, label, description, price FROM chart WHERE truck_id = ?"
 	/*truck-id doit etre mis en cookie*/
-	rows, err := Mydb.DB.Query(query, Trucksid)
+	rows, err := Mydb.Query(query, Trucksid)
 	if err != nil {
 		log.Printf("Erreur lors de l'exécution de la requête : %v", err)
 		return nil, err
@@ -48,10 +49,10 @@ func GetTrucksChart(Mydb *DBController, Trucksid int) ([]entities.Chart, error) 
 	return charts, nil
 }
 
-func deleteChart(Mydb *DBController, conusId int) {
+func deleteChart(Mydb *sql.DB, conusId int) {
 	query := "DELETE FROM chart WHERE consumable_id= ?"
 
-	result, err := Mydb.DB.Exec(query, conusId)
+	result, err := Mydb.Exec(query, conusId)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -67,11 +68,11 @@ func deleteChart(Mydb *DBController, conusId int) {
 	}
 }
 
-func createChart(Mydb *DBController, consumableID int, truckID int, label string, description string, price float64) error {
+func createChart(Mydb *sql.DB, consumableID int, truckID int, label string, description string, price float64) error {
 
 	query := `INSERT INTO chart (consumable_id, truck_id, label, description, price) VALUES (?, ?, ?, ?, ?)`
 
-	_, err := Mydb.DB.Exec(query, consumableID, truckID, label, description, price)
+	_, err := Mydb.Exec(query, consumableID, truckID, label, description, price)
 	if err != nil {
 
 		return fmt.Errorf("createChart: error when inserting new chart entry: %v", err)
@@ -80,11 +81,11 @@ func createChart(Mydb *DBController, consumableID int, truckID int, label string
 	return nil
 }
 
-func updateChart(Mydb *DBController, consumableID int, truckID int, label string, description string, price float64) error {
+func updateChart(Mydb *sql.DB, consumableID int, truckID int, label string, description string, price float64) error {
 
 	query := `UPDATE chart SET truck_id = ?, label = ?, description = ?, price = ? WHERE consumable_id = ?`
 
-	result, err := Mydb.DB.Exec(query, truckID, label, description, price, consumableID)
+	result, err := Mydb.Exec(query, truckID, label, description, price, consumableID)
 	if err != nil {
 
 		return fmt.Errorf("updateChart: error when updating chart entry with consumableID %d: %v", consumableID, err)

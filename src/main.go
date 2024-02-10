@@ -1,8 +1,8 @@
 package main
 
 import (
+	Managers "GoResto/Managers"
 	"fmt"
-	"github.com/UnMaxDeJoie/GoResto/Managers"
 	"log"
 )
 
@@ -17,13 +17,13 @@ func main() {
 
 	// Étape 2: Récupérer l'instance de connexion
 	truc := Managers.GetDBController()
-	if truc == nil || truc.DB == nil {
+	if truc == nil {
 		log.Fatal("Impossible d'établir une connexion à la base de données.")
 	}
 
 	// Étape 3: Exécuter une requête de test
 	var testQuery string
-	err := truc.DB.QueryRow("SELECT 'Connexion réussie'").Scan(&testQuery)
+	err := truc.QueryRow("SELECT 'Connexion réussie'").Scan(&testQuery)
 	if err != nil {
 		log.Fatalf("Échec de la requête de test : %v", err)
 	}

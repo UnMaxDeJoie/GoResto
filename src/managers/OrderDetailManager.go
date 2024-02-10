@@ -1,14 +1,15 @@
 package Managers
 
 import (
+	"GoResto/entities"
+	"database/sql"
 	"fmt"
-	"github.com/UnMaxDeJoie/GoResto/entities"
 )
 
-func createOrderDetail(Mydb *DBController, orderID, consumableID, quantity int, comment string) error {
+func createOrderDetail(Mydb *sql.DB, orderID, consumableID, quantity int, comment string) error {
 	query := `INSERT INTO order_details (order_id, consumable_id, quantity, comment) VALUES (?, ?, ?, ?)`
 
-	_, err := Mydb.DB.Exec(query, orderID, consumableID, quantity, comment)
+	_, err := Mydb.Exec(query, orderID, consumableID, quantity, comment)
 	if err != nil {
 		return fmt.Errorf("createOrderDetail: error when inserting new order detail: %v", err)
 	}
@@ -16,9 +17,9 @@ func createOrderDetail(Mydb *DBController, orderID, consumableID, quantity int, 
 	return nil
 }
 
-func getOrderDetailsByOrderID(Mydb *DBController, orderID int) ([]entities.OrderDetail, error) {
+func getOrderDetailsByOrderID(Mydb *sql.DB, orderID int) ([]entities.OrderDetail, error) {
 	query := `SELECT order_id, consumable_id, quantity, comment FROM order_details WHERE order_id = ?`
-	rows, err := Mydb.DB.Query(query, orderID)
+	rows, err := Mydb.Query(query, orderID)
 	if err != nil {
 		return nil, fmt.Errorf("getOrderDetailsByOrderID: error when getting order details: %v", err)
 	}
@@ -36,10 +37,10 @@ func getOrderDetailsByOrderID(Mydb *DBController, orderID int) ([]entities.Order
 	return orderDetails, nil
 }
 
-func getOrderDetailsByTruckID(Mydb *DBController, truckID int) ([]entities.OrderDetail, error) {
+func getOrderDetailsByTruckID(Mydb *sql.DB, truckID int) ([]entities.OrderDetail, error) {
 	// Ajustez la requête pour sélectionner en fonction de TruckID
 	query := `SELECT order_id, consumable_id, quantity, comment FROM order_details WHERE truck_id = ?`
-	rows, err := Mydb.DB.Query(query, truckID)
+	rows, err := Mydb.Query(query, truckID)
 	if err != nil {
 		return nil, fmt.Errorf("getOrderDetailsByTruckID: error when getting order details: %v", err)
 	}
@@ -57,10 +58,10 @@ func getOrderDetailsByTruckID(Mydb *DBController, truckID int) ([]entities.Order
 	return orderDetails, nil
 }
 
-func getOrderDetailsByConsumableID(Mydb *DBController, consumableID int) ([]entities.OrderDetail, error) {
+func getOrderDetailsByConsumableID(Mydb *sql.DB, consumableID int) ([]entities.OrderDetail, error) {
 	// Ajustez la requête pour sélectionner en fonction de ConsumableID
 	query := `SELECT order_id, consumable_id, quantity, comment FROM order_details WHERE consumable_id = ?`
-	rows, err := Mydb.DB.Query(query, consumableID)
+	rows, err := Mydb.Query(query, consumableID)
 	if err != nil {
 		return nil, fmt.Errorf("getOrderDetailsByConsumableID: error when getting order details: %v", err)
 	}
@@ -78,10 +79,10 @@ func getOrderDetailsByConsumableID(Mydb *DBController, consumableID int) ([]enti
 	return orderDetails, nil
 }
 
-func updateOrderDetail(Mydb *DBController, orderID, consumableID, quantity int, comment string) error {
+func updateOrderDetail(Mydb *sql.DB, orderID, consumableID, quantity int, comment string) error {
 	query := `UPDATE order_details SET quantity = ?, comment = ? WHERE order_id = ? AND consumableID = ?`
 
-	result, err := Mydb.DB.Exec(query, quantity, comment, orderID, consumableID)
+	result, err := Mydb.Exec(query, quantity, comment, orderID, consumableID)
 	if err != nil {
 		return fmt.Errorf("updateOrderDetail: error when updating order detail: %v", err)
 	}
@@ -98,10 +99,10 @@ func updateOrderDetail(Mydb *DBController, orderID, consumableID, quantity int, 
 	return nil
 }
 
-func deleteOrderDetail(Mydb *DBController, orderID, consumableID int) error {
+func deleteOrderDetail(Mydb *sql.DB, orderID, consumableID int) error {
 	query := `DELETE FROM order_details WHERE order_id = ? AND consumable_id = ?`
 
-	result, err := Mydb.DB.Exec(query, orderID, consumableID)
+	result, err := Mydb.Exec(query, orderID, consumableID)
 	if err != nil {
 		return fmt.Errorf("deleteOrderDetail: error when deleting order detail: %v", err)
 	}

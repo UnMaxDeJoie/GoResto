@@ -34,7 +34,7 @@ func NewDBController() {
 	G_Mydb = &DBController{DB: db}
 }
 
-func GetDBController() *DBController {
+func GetDBController() *sql.DB {
 	if G_Mydb == nil || G_Mydb.DB == nil {
 		NewDBController() // Initialise la connexion si elle n'existe pas.
 	} else {
@@ -44,7 +44,7 @@ func GetDBController() *DBController {
 		}
 	}
 
-	return G_Mydb
+	return G_Mydb.DB
 }
 
 /*regarde comment relancer la connexion si ca échoue la fonction ping existe elle renvoie un nil*/
