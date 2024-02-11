@@ -48,7 +48,7 @@
 </div>
 
 <script>
-    function sendMail() {
+    window.sendMail = function() {
         fetch('/send-mail')
             .then(response => response.text())
     }
