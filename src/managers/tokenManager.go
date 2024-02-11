@@ -5,9 +5,12 @@ import (
 	"time"
 )
 
-func createToken(email string) (string, error) {
+var secretKey = []byte("secret-key")
+
+func CreateToken(email string, uid int) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256,
 		jwt.MapClaims{
+			"id":    uid,
 			"email": email,
 			"exp":   time.Now().Add(time.Hour * 24).Unix(),
 		})

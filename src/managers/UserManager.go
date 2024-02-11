@@ -4,6 +4,7 @@ import (
 	"GoResto/entities"
 	"database/sql"
 	"fmt"
+	"golang.org/x/crypto/bcrypt"
 	"log"
 )
 
@@ -39,22 +40,27 @@ func DeleteUser(Mydb *sql.DB, uid int) {
 	}
 }
 
-func CreateUser(Mydb *sql.DB, Name string, Password string, email string, permission uint8) (entities.User, error) {
+func CreateUser(Mydb *sql.DB, Name, Password, Email string, Permission uint8) (entities.User, error) {
+	// Hasher le mot de passe
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(Password), bcrypt.DefaultCost)
+	if err != nil {
+		log.Printf("Erreur lors du hashage du mot de passe : %v", err)
+		return entities.User{}, fmt.Errorf("could not hash password: %v", err)
+	}
 
 	user := entities.User{
 		Username:   Name,
-		PwHash:     Password,
-		Email:      email,
-		Permission: permission,
+		PwHash:     string(hashedPassword),
+		Email:      Email,
+		Permission: Permission,
 	}
 
-	_, err := Mydb.Exec("INSERT INTO users (username, pw_hash, email, permissions) VALUES (?, ?, ?, ?)", user.Username, user.PwHash, user.Email, user.Permission)
+	_, err = Mydb.Exec("INSERT INTO users (username, pw_hash, email, permissions) VALUES (?, ?, ?, ?)", user.Username, user.PwHash, user.Email, user.Permission)
 	if err != nil {
 		log.Printf("Erreur lors de la création de l'utilisateur : %v", err)
 		return entities.User{}, fmt.Errorf("could not create user: %v", err)
 	}
-
-	return user, err
+	return user, nil
 }
 
 func rank(db *sql.DB, uid int) (uint8, error) {

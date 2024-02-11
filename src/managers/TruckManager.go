@@ -4,6 +4,7 @@ import (
 	"GoResto/entities"
 	"database/sql"
 	"fmt"
+	"log"
 	"time"
 )
 
@@ -16,6 +17,35 @@ func createTruck(Mydb *sql.DB, name string, slotBuffer uint8, opening, closing t
 	}
 
 	return nil
+}
+func GetAllTrucks(db *sql.DB) ([]entities.Truck, error) {
+	var trucks []entities.Truck
+
+	// Remplacez 'your_trucks_table' par le nom réel de votre table de trucks
+	query := "SELECT id, name, slot_buffer, opening, closing FROM trucks"
+	rows, err := db.Query(query)
+	if err != nil {
+		log.Printf("Erreur lors de la requête pour obtenir tous les trucks: %v", err)
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var truck entities.Truck
+		// Assurez-vous d'adapter le Scan en fonction de la structure de votre table
+		if err := rows.Scan(&truck.ID, &truck.Name, &truck.SlotBuffer, &truck.Opening, &truck.Closing); err != nil {
+			log.Printf("Erreur lors du scan d'un truck: %v", err)
+			return nil, err
+		}
+		trucks = append(trucks, truck)
+	}
+
+	if err = rows.Err(); err != nil {
+		log.Printf("Erreur lors de l'itération sur les résultats des trucks: %v", err)
+		return nil, err
+	}
+
+	return trucks, nil
 }
 
 func getTruckByID(Mydb *sql.DB, id int) (entities.Truck, error) {

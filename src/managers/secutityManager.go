@@ -4,28 +4,39 @@ import (
 	"GoResto/entities"
 	"database/sql"
 	"errors"
-	"fmt"
+	"golang.org/x/crypto/bcrypt"
+	"log"
 )
 
-var secretKey = []byte("secret-key")
-
-func login(Mydb *DBController, pwHash string, email string) (string, error) {
+func Login(Mydb *sql.DB, password, email string) (int, string, error) {
 	var user entities.User
-	err := Mydb.DB.QueryRow("SELECT id, pw_hash, email FROM users WHERE email = ?", user.Email).Scan(&user.Email, &user.PwHash)
 
+	// Récupération du hash du mot de passe depuis la base de données
+	err := Mydb.QueryRow("SELECT id, pw_hash, email FROM users WHERE email = ?", email).Scan(&user.ID, &user.PwHash, &user.Email)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return "", errors.New("invalid email or password")
+			return 0, "", errors.New("invalid email or password")
 		}
-		return "", err
+		log.Printf("Erreur lors de la récupération de l'utilisateur : %v", err)
+		return 0, "", err
 	}
-	if pwHash == user.PwHash {
-		tokenString, err := createToken(email)
-		if err != nil {
-			fmt.Errorf("No username found")
+
+	err = bcrypt.CompareHashAndPassword([]byte(user.PwHash), []byte(password))
+	if err != nil {
+		// bcrypt.CompareHashAndPassword renvoie une erreur si les mots de passe ne correspondent pas
+		if err == bcrypt.ErrMismatchedHashAndPassword {
+			return 0, "", errors.New("invalid email or password")
 		}
-		return tokenString, err
-	} else {
-		return "", fmt.Errorf("password not match")
+		// Autre erreur bcrypt
+		log.Printf("Erreur lors de la comparaison des mots de passe : %v", err)
+		return 0, "", err
 	}
+
+	tokenString, err := CreateToken(user.Email, user.ID)
+	if err != nil {
+		log.Printf("Erreur lors de la création du token : %v", err)
+		return 0, "", err
+	}
+
+	return user.ID, tokenString, nil
 }
