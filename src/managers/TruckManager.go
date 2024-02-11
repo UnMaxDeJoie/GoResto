@@ -48,7 +48,7 @@ func GetAllTrucks(db *sql.DB) ([]entities.Truck, error) {
 	return trucks, nil
 }
 
-func getTruckByID(Mydb *sql.DB, id int) (entities.Truck, error) {
+func GetTruckByID(Mydb *sql.DB, id string) (entities.Truck, error) {
 	var truck entities.Truck
 	query := `SELECT id, name, slot_buffer, opening, closing FROM trucks WHERE id = ?`
 

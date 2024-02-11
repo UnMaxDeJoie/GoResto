@@ -33,6 +33,7 @@ func main() {
 	// Définir le handler de login
 	http.HandleFunc("/login", handler.LoginHandler)
 	http.HandleFunc("/truck", handler.TruckHandler)
+	http.HandleFunc("/trucks", handler.TrucksHandler)
 
 	// Démarrer le serveur HTTP
 	log.Println("Le serveur écoute sur le port :3000...")

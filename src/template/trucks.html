@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trucks</title>
+</head>
+<body>
+<input class="logout" type="button" name="Logout" value="Logout"/>
+<div class="title">
+    <strong>Trucks</strong>
+</div>
+{{ range .truckId }}
+<div class="card">
+    <img class="food-truck-image" src="/public/image/foodTruck.jpg" alt="Truck Image">
+    <a class="button" href="FoodTruck.html?id={{ .ID }}">{{ .Name }}</a>
+</div>
+{{ end }}
+</body>
+</html>
