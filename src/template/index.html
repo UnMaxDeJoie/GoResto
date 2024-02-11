@@ -42,6 +42,17 @@
         </form>
     </div>
 
+    <div class="col-4">
+        <button class="btn btn-secondary" onclick="sendMail()">Envoyer un mail</button>
+    </div>
 </div>
+
+<script>
+    function sendMail() {
+        fetch('/send-mail')
+            .then(response => response.text())
+    }
+</script>
+
 </body>
 </html>
