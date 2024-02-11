@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Trucks</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient( #186318, #2196F3);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+        }
+        .title {
+            justify-content: center;
+            align-items: center;
+            font-size: 40px;
+            padding: 10px;
+            margin: 15px;
+            color: white;
+        }
+        .logout {
+            background: #186318;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 15px;
+        }
+        .logout:hover {
+            background: #2196F3;
+        }
+        .card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            padding: 20px;
+            text-align: center;
+        }
+        .food-truck-image {
+            width: 100%;
+            border-radius: 8px;
+        }
+        .button {
+            background: #2196F3;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 15px;
+        }
+        .button:hover {
+            background: #186318 ;
+        }
+    </style>
+</head>
+<body>
+<input class="logout" type="button" name="Logout" value="Logout"/>
+<div class="title">
+    <strong>Food Trucks</strong>
+</div>
+{{ range .FoodTrucks }}
+    <div class="card">
+        <img class="food-truck-image" src="/public/image/foodTruck.jpg" alt="Food Truck Image">
+        <a class="button" href="lien_vers_page_food_truck.html">{{ range .Name }}</a>
+    </div>
+{{ end }}
+</body>
+</html>
