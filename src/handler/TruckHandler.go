@@ -2,30 +2,34 @@ package handler
 
 import (
 	"GoResto/managers"
-	"encoding/json"
+	"html/template"
 	"net/http"
 )
 
-func TrucksHandler(w http.ResponseWriter, r *http.Request) {
+func TruckHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
-		// Si la méthode de la requête n'est pas GET, renvoyez une erreur 405 Method Not Allowed
 		http.Error(w, "Méthode non autorisée", http.StatusMethodNotAllowed)
 		return
 	}
-	Mydb := managers.GetDBController()
 
-	// Utilisez la fonction GetAllTrucks de votre package Managers pour récupérer les trucks
-	trucks, err := managers.GetAllTrucks(Mydb)
+	// Obtenez les données des "trucks" de la base de données
+	Mydb := managers.GetDBController()         // Assurez-vous que cette fonction retourne une connexion DB valide
+	trucks, err := managers.GetAllTrucks(Mydb) // Supposons que cette fonction renvoie une liste de "trucks" et une erreur
 	if err != nil {
-		http.Error(w, "Impossible de récupérer les trucks", http.StatusInternalServerError)
+		http.Error(w, "Impossible de récupérer les données des trucks", http.StatusInternalServerError)
 		return
 	}
 
-	// Définir le Content-Type de la réponse à application/json
-	w.Header().Set("Content-Type", "application/json")
+	// Chargez le template HTML
+	tmpl, err := template.ParseFiles("template/trucks.html") // Assurez-vous que le chemin est correct
+	if err != nil {
+		http.Error(w, "Erreur lors du chargement de la page des trucks", http.StatusInternalServerError)
+		return
+	}
 
-	// Encoder les trucks en JSON et les écrire dans la réponse
-	if err := json.NewEncoder(w).Encode(trucks); err != nil {
-		http.Error(w, "Erreur lors de l'encodage des trucks en JSON", http.StatusInternalServerError)
+	// Exécutez le template en passant les données des "trucks"
+	err = tmpl.Execute(w, trucks) // Assurez-vous que votre template HTML est prêt à utiliser ces données
+	if err != nil {
+		http.Error(w, "Erreur lors du rendu de la page des trucks", http.StatusInternalServerError)
 	}
 }
