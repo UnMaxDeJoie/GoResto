@@ -5,6 +5,7 @@ import (
 	"NewGoResto/src/managers"
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -16,6 +17,7 @@ func CreateChartEndpoint(db *sql.DB) http.HandlerFunc {
 		var chart entities.Chart
 		err := json.NewDecoder(r.Body).Decode(&chart)
 		if err != nil {
+			fmt.Println(err)
 			http.Error(w, "Invalid request body", http.StatusBadRequest)
 			return
 		}
@@ -34,11 +36,13 @@ func GetChartByIDEndpoint(db *sql.DB) http.HandlerFunc {
 
 		chartID, err := strconv.Atoi(chartIDString)
 		if err != nil {
+			fmt.Println(err)
 			http.Error(w, "Invalid Chart ID", http.StatusBadRequest)
 			return
 		}
 		chart, err := managers.GetChartById(db, chartID)
 		if err != nil {
+			fmt.Println(err)
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
 			return
 		}
@@ -52,11 +56,13 @@ func GetChartsByTruckIDEndpoint(db *sql.DB) http.HandlerFunc {
 
 		truckID, err := strconv.Atoi(truckIDString)
 		if err != nil {
+			fmt.Println(err)
 			http.Error(w, "Invalid Truck ID", http.StatusBadRequest)
 			return
 		}
 		charts, err := managers.GetTrucksChart(db, truckID)
 		if err != nil {
+			fmt.Println(err)
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
 			return
 		}
@@ -69,11 +75,13 @@ func UpdateChartEndpoint(db *sql.DB) http.HandlerFunc {
 		var chart entities.Chart
 		err := json.NewDecoder(r.Body).Decode(&chart)
 		if err != nil {
+			fmt.Println(err)
 			http.Error(w, "Invalid request body", http.StatusBadRequest)
 			return
 		}
 		err = managers.UpdateChart(db, chart.ConsumableID, chart.TruckID, chart.Label, chart.Description, chart.Price)
 		if err != nil {
+			fmt.Println(err)
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
 			return
 		}
@@ -87,12 +95,14 @@ func DeleteChartEndpoint(db *sql.DB) http.HandlerFunc {
 
 		consumableID, err := strconv.Atoi(consumableIDString)
 		if err != nil {
+			fmt.Println(err)
 			http.Error(w, "Invalid Chart ID", http.StatusBadRequest)
 			return
 		}
 
 		managers.DeleteChart(db, consumableID)
 		if err != nil {
+			fmt.Println(err)
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
 			return
 		}

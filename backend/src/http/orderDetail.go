@@ -37,11 +37,13 @@ func GetOrderDetailsByOrderIDEndpoint(db *sql.DB) http.HandlerFunc {
 
 		orderID, err := strconv.Atoi(orderIDString)
 		if err != nil {
+			fmt.Println(err)
 			http.Error(w, "Invalid Order ID", http.StatusBadRequest)
 			return
 		}
 		orderDetails, err := managers.GetOrderDetailsByOrderID(db, orderID)
 		if err != nil {
+			fmt.Println(err)
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
 			return
 		}
@@ -55,11 +57,13 @@ func GetOrderDetailsByTruckIDEndpoint(db *sql.DB) http.HandlerFunc {
 
 		truckID, err := strconv.Atoi(truckIDString)
 		if err != nil {
+			fmt.Println(err)
 			http.Error(w, "Invalid Truck ID", http.StatusBadRequest)
 			return
 		}
 		orderDetails, err := managers.GetOrderDetailsByTruckID(db, truckID)
 		if err != nil {
+			fmt.Println(err)
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
 			return
 		}
@@ -73,11 +77,13 @@ func GetOrderDetailsByConsumableIDEndpoint(db *sql.DB) http.HandlerFunc {
 
 		consumableID, err := strconv.Atoi(consumableIDString)
 		if err != nil {
+			fmt.Println(err)
 			http.Error(w, "Invalid Consumable ID", http.StatusBadRequest)
 			return
 		}
 		orderDetail, err := managers.GetOrderDetailsByConsumableID(db, consumableID)
 		if err != nil {
+			fmt.Println(err)
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
 			return
 		}
@@ -103,6 +109,7 @@ func UpdateOrderDetailEndpoint(db *sql.DB) http.HandlerFunc {
 		}
 		err = managers.UpdateOrderDetail(db, orderID, orderDetailModel.ConsumableID, orderDetailModel.Quantity, orderDetailModel.Comment)
 		if err != nil {
+			fmt.Println(err)
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
 			return
 		}
@@ -116,6 +123,7 @@ func DeleteOrderDetailEndpoint(db *sql.DB) http.HandlerFunc {
 
 		orderDetailID, err := strconv.Atoi(orderDetailIDString)
 		if err != nil {
+			fmt.Println(err)
 			http.Error(w, "Invalid Order Detail ID", http.StatusBadRequest)
 			return
 		}
@@ -123,12 +131,14 @@ func DeleteOrderDetailEndpoint(db *sql.DB) http.HandlerFunc {
 		consumableString := chi.URLParam(r, "consumableID")
 		consumableID, err := strconv.Atoi(consumableString)
 		if err != nil {
+			fmt.Println(err)
 			http.Error(w, "Invalid Consumable ID", http.StatusBadRequest)
 			return
 		}
 
 		err = managers.DeleteOrderDetail(db, orderDetailID, consumableID)
 		if err != nil {
+			fmt.Println(err)
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
 			return
 		}
