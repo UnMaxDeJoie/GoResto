@@ -37,7 +37,7 @@ func NewHandler(db *sql.DB, ref entities.Reference) *HandlerReference {
 	handlers.Use(middleware.Logger)
 
 	handlers.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Welcome to the API Go-Food"))
+		w.Write([]byte("Welcome to the API GoResto"))
 	})
 
 	handlers.Post("/truck", myhttp.CreateTrucksEndpoint(db))
@@ -47,6 +47,7 @@ func NewHandler(db *sql.DB, ref entities.Reference) *HandlerReference {
 	handlers.Patch("/truck/{truckID:[0-9]+}", myhttp.UpdateTruckEndpoint(db))
 
 	handlers.Post("/user", myhttp.CreateUserEndpoint(db))
+	handlers.Post("/login", myhttp.LoginEndpoint(db))
 	handlers.Get("/user/{userID:[0-9]+}", myhttp.GetUserByIdEndpoint(db))
 	handlers.Delete("/user/{userID:[0-9]+}", myhttp.DeleteUserEndpoint(db))
 

@@ -18,7 +18,7 @@ func CreateOrderDetail(Mydb *sql.DB, orderID, consumableID, quantity int, commen
 }
 
 func GetOrderDetailsByOrderID(Mydb *sql.DB, orderID int) ([]entities.OrderDetail, error) {
-	query := `SELECT order_id, consumable_id, quantity, comment FROM order_details WHERE order_id = ?`
+	query := `SELECT order_id, consumable_id, quantity, comment FROM order_detail WHERE order_id = ?`
 	rows, err := Mydb.Query(query, orderID)
 	if err != nil {
 		return nil, fmt.Errorf("getOrderDetailsByOrderID: error when getting order details: %v", err)

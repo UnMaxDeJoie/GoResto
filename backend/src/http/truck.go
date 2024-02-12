@@ -21,7 +21,7 @@ func CreateTrucksEndpoint(db *sql.DB) http.HandlerFunc {
 			http.Error(w, "Invalid truck data", http.StatusBadRequest)
 			return
 		}
-		err = managers.CreateTruck(db, truckModel.Name, truckModel.SlotBuffer, truckModel.Opening, truckModel.Closing)
+		err = managers.CreateTruck(db, truckModel.Name, truckModel.SlotBuffer, truckModel.Opening, truckModel.Closing,truckModel.UserID)
 		if err != nil {
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
 			return
@@ -88,7 +88,7 @@ func UpdateTruckEndpoint(db *sql.DB) http.HandlerFunc {
 			http.Error(w, "Invalid truck data", http.StatusBadRequest)
 			return
 		}
-		err = managers.UpdateTruck(db, truckModel.ID, truckModel.Name, truckModel.SlotBuffer, truckModel.Opening, truckModel.Closing)
+		err = managers.UpdateTruck(db, truckModel.ID, truckModel.Name, truckModel.SlotBuffer, truckModel.Opening, truckModel.Closing ,truckModel.UserID)
 		if err != nil {
 			fmt.Println(err)
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
