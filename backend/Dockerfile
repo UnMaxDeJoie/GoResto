@@ -2,10 +2,10 @@
 # DOCKER START STAGE
 ###############################
 FROM golang:latest
-WORKDIR /pierr/New-go-resto/
+WORKDIR /luc/go-resto/
 USER ${USER}
-ADD ./go.mod /pierr/New-go-resto/
-ADD ./src /pierr/New-go-resto/src
+ADD ./go.mod /luc/go-resto/
+ADD ./src /luc/go-resto/src
 
 ###############################
 # DOCKER ENVIRONMENT STAGE
@@ -26,7 +26,7 @@ RUN apt-get autoremove \
 ###############################
 # DOCKER INSTALL & BUILD STAGE
 ###############################
-RUN cd /pierr/New-go-resto/src/main \
+RUN cd /luc/go-resto/src/main \
   && go mod download \
   && go mod tidy \
   && go mod verify \

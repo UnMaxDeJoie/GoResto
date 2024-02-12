@@ -116,7 +116,10 @@ CREATE TABLE `trucks` (
                           `slot_buffer` tinyint(3) unsigned NOT NULL,
                           `opening` varchar(64) NOT NULL,
                           `closing` varchar(64) NOT NULL,
-                          PRIMARY KEY (`id`)
+                          `user_id` int(11),
+                          PRIMARY KEY (`id`),
+                          KEY `truck_user_id_idx` (`user_id`),
+                          CONSTRAINT `truck_user_fk` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
