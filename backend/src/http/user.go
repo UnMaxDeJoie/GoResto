@@ -23,6 +23,7 @@ func CreateUserEndpoint(db *sql.DB) http.HandlerFunc {
 		}
 		user, err := managers.CreateUser(db, userModel.Username, userModel.PwHash, userModel.Email, userModel.Permission)
 		if err != nil {
+			fmt.Println(err)
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
 			return
 		}
@@ -36,6 +37,7 @@ func GetUserByIdEndpoint(db *sql.DB) http.HandlerFunc {
 
 		userID, err := strconv.Atoi(userIDString)
 		if err != nil {
+			fmt.Println(err)
 			http.Error(w, "Invalid User ID", http.StatusBadRequest)
 			return
 		}
@@ -54,6 +56,7 @@ func DeleteUserEndpoint(db *sql.DB) http.HandlerFunc {
 
 		userID, err := strconv.Atoi(userIDString)
 		if err != nil {
+			fmt.Println(err)
 			http.Error(w, "Invalid User ID", http.StatusBadRequest)
 			return
 		}

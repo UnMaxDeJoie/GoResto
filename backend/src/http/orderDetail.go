@@ -23,6 +23,7 @@ func CreateOrderDetailsEndpoint(db *sql.DB) http.HandlerFunc {
 		}
 		err = managers.CreateOrderDetail(db, orderDetailModel.OrderID, orderDetailModel.ConsumableID, orderDetailModel.Quantity, orderDetailModel.Comment)
 		if err != nil {
+			fmt.Println(err)
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
 			return
 		}

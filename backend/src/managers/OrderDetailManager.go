@@ -7,7 +7,7 @@ import (
 )
 
 func CreateOrderDetail(Mydb *sql.DB, orderID, consumableID, quantity int, comment string) error {
-	query := `INSERT INTO order_details (order_id, consumable_id, quantity, comment) VALUES (?, ?, ?, ?)`
+	query := `INSERT INTO order_detail (order_id, consumable_id, quantity, comment) VALUES (?, ?, ?, ?)`
 
 	_, err := Mydb.Exec(query, orderID, consumableID, quantity, comment)
 	if err != nil {
@@ -39,7 +39,7 @@ func GetOrderDetailsByOrderID(Mydb *sql.DB, orderID int) ([]entities.OrderDetail
 
 func GetOrderDetailsByTruckID(Mydb *sql.DB, truckID int) ([]entities.OrderDetail, error) {
 	// Ajustez la requête pour sélectionner en fonction de TruckID
-	query := `SELECT order_id, consumable_id, quantity, comment FROM order_details WHERE truck_id = ?`
+	query := `SELECT order_id, consumable_id, quantity, comment FROM order_detail WHERE truck_id = ?`
 	rows, err := Mydb.Query(query, truckID)
 	if err != nil {
 		return nil, fmt.Errorf("getOrderDetailsByTruckID: error when getting order details: %v", err)
@@ -60,7 +60,7 @@ func GetOrderDetailsByTruckID(Mydb *sql.DB, truckID int) ([]entities.OrderDetail
 
 func GetOrderDetailsByConsumableID(Mydb *sql.DB, consumableID int) ([]entities.OrderDetail, error) {
 	// Ajustez la requête pour sélectionner en fonction de ConsumableID
-	query := `SELECT order_id, consumable_id, quantity, comment FROM order_details WHERE consumable_id = ?`
+	query := `SELECT order_id, consumable_id, quantity, comment FROM order_detail WHERE consumable_id = ?`
 	rows, err := Mydb.Query(query, consumableID)
 	if err != nil {
 		return nil, fmt.Errorf("getOrderDetailsByConsumableID: error when getting order details: %v", err)
@@ -80,7 +80,7 @@ func GetOrderDetailsByConsumableID(Mydb *sql.DB, consumableID int) ([]entities.O
 }
 
 func UpdateOrderDetail(Mydb *sql.DB, orderID, consumableID, quantity int, comment string) error {
-	query := `UPDATE order_details SET quantity = ?, comment = ? WHERE order_id = ? AND consumableID = ?`
+	query := `UPDATE order_detail SET quantity = ?, comment = ? WHERE order_id = ? AND consumableID = ?`
 
 	result, err := Mydb.Exec(query, quantity, comment, orderID, consumableID)
 	if err != nil {
@@ -100,7 +100,7 @@ func UpdateOrderDetail(Mydb *sql.DB, orderID, consumableID, quantity int, commen
 }
 
 func DeleteOrderDetail(Mydb *sql.DB, orderID, consumableID int) error {
-	query := `DELETE FROM order_details WHERE order_id = ? AND consumable_id = ?`
+	query := `DELETE FROM order_detail WHERE order_id = ? AND consumable_id = ?`
 
 	result, err := Mydb.Exec(query, orderID, consumableID)
 	if err != nil {
